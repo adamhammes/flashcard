@@ -81,7 +81,7 @@ var FlashcardMode = {
   "Right": 3
 }
 
-class FlashcardComponent extends React.Component {
+export class FlashcardComponent extends React.Component {
 	constructor(props) {
   	super(props);
     this.state = {mode: FlashcardMode.Prompt}
@@ -115,5 +115,3 @@ class FlashcardComponent extends React.Component {
     return <div className='flashcard-container'>{innerComponent}</div>
   }
 }
-
-export default FlashcardComponent;
