@@ -1,0 +1,12 @@
+#root {
+    text-align: center;
+}
+
+.flashcard-container {
+    margin: 50px auto;
+    display: inline-block;
+}
+
+form {
+    margin-top: 1em;
+}
