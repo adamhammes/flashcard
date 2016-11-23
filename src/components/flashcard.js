@@ -11,7 +11,7 @@ class FlashcardWrong extends React.Component {
     
   handleChange(event) {
   	if (event.target.value === this.props.answer) {
-    	// TODO
+    	this.props.onCardComplete(false);
     }
   }
   
@@ -35,11 +35,25 @@ class FlashcardWrong extends React.Component {
 
 // eventually should transition when key is pressed
 class FlashcardRight extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleCardSubmit = this.handleCardSubmit.bind(this);
+  }
+
+  handleCardSubmit(event) {
+    event.preventDefault();
+    this.props.onCardComplete(true);
+  }
+
 	render() {
   	return <div>
     	<h2>Correct</h2>
       <div>Prompt: {this.props.prompt}</div>
       <div>Answer: {this.props.answer}</div>
+      <form onSubmit={this.handleCardSubmit}>
+        <input type="submit"/>
+      </form>
     </div>
   }
 }
@@ -87,11 +101,7 @@ export class FlashcardComponent extends React.Component {
     this.state = {mode: FlashcardMode.Prompt}
     
     this.handleCardSubmit = this.handleCardSubmit.bind(this);
-    
-    this.childProps = {
-    	...this.props,
-      handleCardSubmit: this.handleCardSubmit
-    }
+    this.onCardComplete = this.onCardComplete.bind(this);
   }
   
   handleCardSubmit(submitValue) {
@@ -101,15 +111,28 @@ export class FlashcardComponent extends React.Component {
     	this.setState({mode: FlashcardMode.Wrong});
     }
   }
+
+  onCardComplete(wasCorrect) {
+    this.setState({mode: FlashcardMode.Prompt});
+    this.props.onCardComplete(wasCorrect);
+  }
   
   render() {
+    const childProps = {
+    	id: this.props.id,
+      prompt: this.props.prompt,
+      answer: this.props.answer,
+      onCardComplete: this.onCardComplete,
+      handleCardSubmit: this.handleCardSubmit
+    };
+
     let innerComponent;
   	if (this.state.mode === FlashcardMode.Prompt) {
-    	innerComponent = <FlashcardPrompt {...this.childProps}/>
+    	innerComponent = <FlashcardPrompt {...childProps}/>
     } else if (this.state.mode === FlashcardMode.Right) {
-    	innerComponent = <FlashcardRight {...this.childProps}/>
+    	innerComponent = <FlashcardRight {...childProps}/>
     } else if (this.state.mode === FlashcardMode.Wrong) {
-    	innerComponent = <FlashcardWrong {...this.childProps}/>
+    	innerComponent = <FlashcardWrong {...childProps}/>
     }
 
     return <div className='flashcard-container'>{innerComponent}</div>
