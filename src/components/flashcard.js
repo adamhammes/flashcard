@@ -52,7 +52,7 @@ class FlashcardRight extends React.Component {
       <div>Prompt: {this.props.prompt}</div>
       <div>Answer: {this.props.answer}</div>
       <form onSubmit={this.handleCardSubmit}>
-        <input type="submit"/>
+        <input type="submit" autoFocus/>
       </form>
     </div>
   }
