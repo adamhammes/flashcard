@@ -101,7 +101,6 @@ export class FlashcardComponent extends React.Component {
     this.state = {mode: FlashcardMode.Prompt}
     
     this.handleCardSubmit = this.handleCardSubmit.bind(this);
-    this.onCardComplete = this.onCardComplete.bind(this);
   }
   
   handleCardSubmit(submitValue) {
@@ -112,9 +111,11 @@ export class FlashcardComponent extends React.Component {
     }
   }
 
-  onCardComplete(wasCorrect) {
-    this.setState({mode: FlashcardMode.Prompt});
-    this.props.onCardComplete(wasCorrect);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.id !== this.props.id) {
+      // we are rendering a new card, so switch back to prompt mode
+      this.setState({mode: FlashcardMode.Prompt});
+    }
   }
   
   render() {
@@ -122,7 +123,7 @@ export class FlashcardComponent extends React.Component {
     	id: this.props.id,
       prompt: this.props.prompt,
       answer: this.props.answer,
-      onCardComplete: this.onCardComplete,
+      onCardComplete: this.props.onCardComplete,
       handleCardSubmit: this.handleCardSubmit
     };
 
